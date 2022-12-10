@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        .main {
+            width: 400px;
+            height: 550px;
+            margin: 50px auto;
+            padding: 20px;
+            border-radius: 20px;
+            background-color: white;
+            box-shadow: 3px 3px 20px rgba(0, 0, 0, .3);
+            text-align: center;
+        }
+
+        .main #view {
+            outline: none;
+            height: 80px;
+            width: 380px;
+            border: transparent;
+            border-radius: 20px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, .3) inset;
+            font-size: 20px;
+            cursor: pointer;
+            background-color: transparent
+        }
+
+
+
+        button {
+            margin-right: 10px;
+            margin-top: 30px;
+            width: 80px;
+            height: 60px;
+            border-radius: 10px;
+            border: transparent;
+            background-color: transparent;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, .2);
+            font-size: 20px;
+            /* transition: transform 0.5s; */
+            color: black;
+        }
+
+        button:hover {
+            cursor: pointer;
+        }
+
+        button:active {
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, .3) inset;
+            color: red;
+        }
+
+        .clear {
+            width: 175px;
+            height: 60px;
+            border-radius: 10px;
+            border: 1px solid white;
+            background-color: pink;
+            color: white;
+
+        }
+
+        .add {
+            height: 150px;
+            border-radius: 10px;
+            border: 1px solid white;
+            background-color: green;
+            color: white;
+        }
+
+        .left {
+            float: left;
+            width: 285px;
+            padding-left: 10px;
+            /* background-color: pink; */
+            margin-right: -10px;
+        }
+
+        .equal {
+            border-radius: 10px;
+            border: 1px solid white;
+            background-color: blue;
+            color: white;
+        }
+
+        .linght {
+            position: absolute;
+            top: 80px;
+            left: 1300px;
+            cursor: pointer;
+            width: 20px;
+            height: 20px;
+            background-color: black;
+            border-radius: 20px;
+            box-shadow: 5px 5px 10px rgba(8, 1, 1, 0.3)
+        }
+
+        .active {
+            background-color: #fff;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, .3) inset;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main">
+        <form action="">
+            <input type="text" name="view" id="view" readonly>
+        </form>
+        <div class="buttonbox">
+            <button class="clear">Clear</button>
+            <button>/</button>
+            <button>*</button>
+            <button>7</button>
+            <button>8</button>
+            <button>9</button>
+            <button>-</button>
+            <div class="left">
+                <button>4</button>
+                <button>5</button>
+                <button>6</button>
+                <button>1</button>
+                <button>2</button>
+                <button>3</button>
+            </div>
+            <button class="add">+</button>
+            <button>0</button>
+            <button>00</button>
+            <button>.</button>
+            <button class="equal">=</button>
+        </div>
+    </div>
+    <div class="linght">
+    </div>
+    <script>
+        let view = document.querySelector('#view')
+        let equal = document.querySelector('.equal')
+        let clear = document.querySelector('.clear')
+        let add = document.querySelector('.add')
+        let btns = document.querySelectorAll('.buttonbox button')
+        let a, b, result, type
+        for (let i = 0; i < btns.length; i++) {
+            btns[i].addEventListener('click', function () {
+                let keyValue = btns[i].innerText
+                let val = view.value
+                if (keyValue >= 0 && keyValue <= 9 || keyValue === '.' && val.indexOf('.') === -1) {
+                    view.value += keyValue
+                }
+                if (val === '' && keyValue === '.') {
+                    view.value = ''
+                }
+                if (val !== '') {
+                    switch (keyValue) {
+                        case 'Clear':
+                            view.value = ''
+                            break;
+                        case '+':
+                            a = val
+                            view.value = ''
+                            type = '+'
+                            break;
+                        case '-':
+                            a = val
+                            view.value = ''
+                            type = '-'
+                            break;
+                        case '*':
+                            a = val
+                            view.value = ''
+                            type = '*'
+                            break;
+                        case '/':
+                            a = val
+                            view.value = ''
+                            type = '/'
+                            break;
+                        case '=':
+                            if (a) {
+                                b = val
+                                if (type === '+') {
+                                    result = parseFloat(a) + parseFloat(b)
+                                }
+                                if (type === '-') {
+                                    result = parseFloat(a) - parseFloat(b)
+                                }
+                                if (type === '*') {
+                                    result = parseFloat(a) * parseFloat(b)
+                                }
+                                if (type === '/') {
+                                    result = parseFloat(a) / parseFloat(b)
+                                }
+                            }
+                            let resultStr = result + ''
+                            let arr = resultStr.split('.')
+                            view.value = arr.length === 2 ? result.toFixed(2) : result
+                            break
+                    }
+                }
+            })
+
+        }
+        let onoff = document.querySelector('.linght')
+        let body = document.querySelector('body')
+        let main = document.querySelector('.main')
+
+        onoff.addEventListener('click', function () {
+            onoff.classList.toggle('active')
+            if (onoff.classList.contains('active')) {
+                body.style.backgroundColor = 'grey'
+                main.style.backgroundColor = 'grey'
+                for (let i = 0; i < btns.length; i++) {
+                    btns[i].style.color = 'white'
+                }
+            } else {
+                body.style.backgroundColor = 'white'
+                main.style.backgroundColor = 'white'
+                for (let i = 0; i < btns.length; i++) {
+                    btns[i].style.color = 'black'
+                }
+                add.style.color = 'white'
+                clear.style.color = 'white'
+                equal.style.color = 'white'
+            }
+        })
+    </script>
+</body>
+
+</html>
